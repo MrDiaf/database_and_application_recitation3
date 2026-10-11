@@ -11,6 +11,7 @@ export JUPYTER_RUNTIME_DIR := $(CURDIR)/.jupyter/runtime
 
 .PHONY: setup up down init tables 
 
+
 setup: .venv/.ready
 
 .venv/.ready: requirements.txt
@@ -63,3 +64,6 @@ init:
 
 tables:	
 	./$(SCRIPTS)/check_tables.sh
+
+play:
+	./$(SCRIPTS)/run_playground.sh

@@ -1,0 +1,1 @@
+psql -d recitation_3 -f playground.sql
