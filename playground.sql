@@ -101,6 +101,33 @@ GROUP BY c.name
 ORDER BY num_planets ASC;
 
 
+/* Qusetion 14 */
+
+/*  
+    cooardinates for the suns 
+    ra_deg double precision,
+    dec_deg double precision,
+*/
+
+/*
+    There is function named constellation_at 
+
+
+*/
+
+WITH calculated_stars AS (
+        SELECT  id, 
+                proper_name,
+                con,
+                constellation_at(ra_deg,dec_deg) as calculated_con
+    FROM star
+)
+SELECT  id, 
+        proper_name,
+        con,
+        calculated_con
+FROM calculated_stars
+WHERE con <> calculated_con; 
 
 
 
