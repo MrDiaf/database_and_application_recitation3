@@ -1,0 +1,1 @@
+psql -d recitation_3 -c '\dt'

@@ -6,9 +6,10 @@ SHELL := /bin/bash
 PYTHON ?= python3
 PORT ?= 8888
 JUPYTER := .venv/bin/jupyter
+SCRIPTS := scripts
 export JUPYTER_RUNTIME_DIR := $(CURDIR)/.jupyter/runtime
 
-.PHONY: setup up down
+.PHONY: setup up down init tables 
 
 setup: .venv/.ready
 
@@ -56,3 +57,9 @@ down:
 			$(JUPYTER) server stop "$$port"
 		done
 	fi
+
+init:
+	./$(SCRIPTS)/init.sh
+
+tables:	
+	./$(SCRIPTS)/check_tables.sh
