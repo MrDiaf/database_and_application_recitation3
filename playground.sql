@@ -129,5 +129,56 @@ SELECT  id,
 FROM calculated_stars
 WHERE con <> calculated_con; 
 
+/* Question 15 */
+
+WITH distances AS  (SELECT n.id,
+       n.proper_name,
+       ABS(n.x_pc - s.x_pc) AS x_diff,
+       ABS(n.y_pc - s.y_pc) AS y_diff,
+       ABS(n.z_pc - s.z_pc) AS z_diff,
+       (ABS(n.x_pc - s.x_pc) * ABS(n.x_pc - s.x_pc) + 
+        ABS(n.y_pc - s.y_pc) * ABS(n.y_pc - s.y_pc) +
+        ABS(n.z_pc - s.z_pc) * ABS(n.z_pc - s.z_pc)) AS distance_pow_2
+    FROM star as n CROSS JOIN star as s 
+    WHERE 
+        s.spectral_type LIKE 'M%' AND 
+        n.id <> s.id
+),
+with_douplicates AS (
+    SELECT DISTINCT n.id,
+                    n.proper_name,
+                    n.distance_pow_2
+    FROM distances AS n  
+    WHERE n.distance_pow_2 < 1
+),
+only_duplicates AS (
+    SELECT DISTINCT s1.id,
+                    s1.proper_name,
+                    MIN(s1.distance_pow_2) AS distance_pow_2
+    FROM with_douplicates AS s1 JOIN 
+    with_douplicates AS s2 
+    ON s1.id = s2.id AND s1.distance_pow_2 <> s2.distance_pow_2
+    GROUP BY s1.id, s1.proper_name
+),
+no_duplicates AS(
+    SELECT DISTINCT n.id, 
+                    n.proper_name,
+                    n.distance_pow_2
+    FROM with_douplicates AS n WHERE n.id NOT IN (SELECT id from only_duplicates)
+)
+
+SELECT id, proper_name, distance_pow_2
+FROM only_duplicates
+
+UNION ALL
+
+SELECT id, proper_name, distance_pow_2
+FROM no_duplicates
+
+ORDER BY distance_pow_2 ASC;
+
+
+
+ 
 
 
