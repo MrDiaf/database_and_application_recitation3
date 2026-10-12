@@ -129,6 +129,27 @@ SELECT  id,
 FROM calculated_stars
 WHERE con <> calculated_con; 
 
+
+/* creating view */
+CREATE VIEW IF NOT EXISTS calculated_stars AS (
+        SELECT  id, 
+                proper_name,
+                con,
+                constellation_at(ra_deg,dec_deg) as calculated_con
+    FROM star
+);
+
+
+SELECT  id, 
+        proper_name,
+        con,
+        calculated_con
+FROM calculated_stars
+WHERE con <> calculated_con; 
+
+
+
+
 /* Question 15 */
 
 /*
